@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -9,6 +12,7 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="contentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXMLDocumentController">
    <top>
@@ -17,6 +21,7 @@
             <Menu mnemonicParsing="false" text="File">
                <items>
                   <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openGeoJson" text="Open" />
+                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveGeoJson" text="Save" />
                   <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
                </items>
             </Menu>
@@ -33,20 +38,6 @@
          </menus>
       </MenuBar>
    </top>
-   <right>
-      <Pane fx:id="parameterPane" prefHeight="375.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-         <children>
-            <Spinner fx:id="pointHeightSpinner" editable="true" prefHeight="25.0" prefWidth="150.0" />
-         </children>
-      </Pane>
-   </right>
-   <left>
-      <Pane fx:id="featuresPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <ListView fx:id="featuresList" prefWidth="200.0" />
-         </children>
-      </Pane>
-   </left>
    <center>
       <LineChart fx:id="chart" prefWidth="450.0" style="-fx-border-color: #AAA; -fx-border-width: 0 1 0 1;" BorderPane.alignment="CENTER">
          <xAxis>
@@ -57,4 +48,36 @@
          </yAxis>
       </LineChart>
    </center>
+   <left>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <VBox fx:id="parametersVBox" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ListView fx:id="featuresList" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 1 1 1 1;" />
+                  <Button fx:id="saveFeatureCoordinatesButton" mnemonicParsing="false" onAction="#saveFeatureCoordinates" prefHeight="25.0" prefWidth="200.0" text="Save coords of selected feature" />
+                  <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="200.0" style="-fx-alignment: center;" text="Value of the selected point" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Spinner fx:id="pointHeightSpinner" disable="true" editable="true" prefHeight="25.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Spinner>
+               </children>
+            </VBox>
+         </center>
+         <bottom>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="graphGoLeftButton" disable="true" layoutY="149.0" mnemonicParsing="false" onAction="#graphGoLeft" prefHeight="25.0" prefWidth="100.0" text="Left" />
+                  <Button fx:id="graphGoRightButton" disable="true" layoutX="100.0" layoutY="149.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Right" />
+                  <Button fx:id="graphZoomInButton" disable="true" layoutY="174.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Zoom in" />
+                  <Button fx:id="graphZoomOutButton" disable="true" layoutX="100.0" layoutY="174.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Zoom out" />
+               </children>
+            </Pane>
+         </bottom>
+      </BorderPane>
+   </left>
 </BorderPane>
