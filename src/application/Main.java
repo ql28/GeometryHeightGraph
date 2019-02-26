@@ -24,8 +24,8 @@ public class Main extends Application {
         stage.show();
         
         //affichage de l'animation au lancement
-        //FXMLDocumentController controller = (FXMLDocumentController)loader.getController();
-        //controller.findScene(scene); 
+        FXMLDocumentController controller = (FXMLDocumentController)loader.getController();
+        controller.findStage(stage); 
         //controller.displayGraph();
     }
     

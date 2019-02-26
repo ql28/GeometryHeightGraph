@@ -2,6 +2,7 @@
 
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -17,7 +18,8 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openGeoJson" text="Open" />
+                    	<MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
@@ -39,7 +41,7 @@
                 <NumberAxis lowerBound="1.0" side="BOTTOM" upperBound="10.0" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAxis" lowerBound="1.0" side="LEFT" upperBound="10.0" />
+                <NumberAxis fx:id="yAxis" lowerBound="5.0" side="LEFT" />
               </yAxis>
             </LineChart>
          </center>
@@ -50,6 +52,13 @@
                </children>
             </Pane>
          </right>
+         <left>
+            <Pane fx:id="featuresPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ListView fx:id="featuresList" prefHeight="375.0" prefWidth="200.0" />
+               </children>
+            </Pane>
+         </left>
       </BorderPane>
    </children>
 </Pane>
