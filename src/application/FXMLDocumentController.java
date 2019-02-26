@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
@@ -48,8 +49,6 @@ public class FXMLDocumentController implements Initializable {
     /************************/
 	
 	@FXML
-    private Pane mainPane;
-	@FXML
 	private BorderPane contentPane;
 	
 	/******  CONTENT PANEL   ******/
@@ -87,37 +86,37 @@ public class FXMLDocumentController implements Initializable {
     private Stage stage;
     private Scene scene;
     Series<Number, Number> series;
-
+    File selectedFile;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Bienvenue");
-
-        //chargement des geojson
-        //loadGeometries();
         
         //affichage du graph (add parameter data)
-        displayGraph();
-    }
-    
-    public Series<Number, Number> loadGeometries(File f){
-    	
-    	Geometry geom;
-    	
-    	return null;
-    }
-
-	public void displayGraph() {
         series = new Series<Number, Number>();
-        series.setName("serie1");
-      
-        chart.setAnimated(false);
-        
-        //init dummy data
-        for(int i=0; i<10; i++){
-            series.getData().add(new Data<Number, Number>(i, i));
-        }
+        chart.setAnimated(false);        
         chart.getData().add(series);
+        chart.setLegendVisible(false);
         
+        featuresList.setVisible(false);
+    }
+	
+    /****** MENU BAR METHODS ******/
+    //load geojson
+    @FXML
+    private void openGeoJson(ActionEvent event) {
+        System.out.println("Open GeoJson");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open GeoJson");
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Json Files", "*.json"), new ExtensionFilter("All Files", "*.*"));
+        selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+        	System.out.println(selectedFile.getName());
+        	addActionClicList();
+        }        
+    }    
+    
+    public void addActionDragPoint() {
         for (Data<Number, Number> data : series.getData()) {
             Node node = data.getNode() ;
             node.setCursor(Cursor.HAND);
@@ -132,43 +131,30 @@ public class FXMLDocumentController implements Initializable {
             });
         }
 	}
-	
-    /****** MENU BAR METHODS ******/
-    //load geojson
-    @FXML
-    private void openGeoJson(ActionEvent event) {
-        System.out.println("Open GeoJson");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open GeoJson");
-        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Json Files", "*.json"), new ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
-        	System.out.println(selectedFile.getName());
-        	try {
-        		FeatureCollection<SimpleFeatureType, SimpleFeature> fc = ApplicationUtils.geoJsonToFeatureCollection(selectedFile);		
-				ObservableList<Object> observableList = FXCollections.observableArrayList(fc.toArray());
-				featuresList.setItems(observableList);
-				featuresList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			        @Override
-			        public void handle(MouseEvent event) {
-			        	
-			            System.out.println("clicked on " + featuresList.getSelectionModel().getSelectedItem());
-			            ApplicationUtils.loadCoordinates((SimpleFeature)featuresList.getSelectionModel().getSelectedItem());
-			            
-			        }
-			    });
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-        }        
-    }
-	
-    @FXML
-    private void displayFeaturePoints(ActionEvent event){
-    	
-    }
+    
+    public void addActionClicList() {
+    	try {
+    		FeatureCollection<SimpleFeatureType, SimpleFeature> fc = ApplicationUtils.geoJsonToFeatureCollection(selectedFile);		
+			ObservableList<Object> observableList = FXCollections.observableArrayList(fc.toArray());
+			featuresList.setVisible(true);
+			featuresList.setItems(observableList);
+			featuresList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		        @Override
+		        public void handle(MouseEvent event) {			        	
+		        	series.getData().clear();
+		            ArrayList<Data<Number, Number>> datas = ApplicationUtils.loadCoordinates((SimpleFeature)featuresList.getSelectionModel().getSelectedItem());			            	            
+		            datas.forEach(data -> {
+		            	series.getData().add(data);
+		            });
+		            addActionDragPoint();
+		        }
+		    });
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
     
     void findStage(Stage stage) {
         this.stage = stage;
