@@ -217,10 +217,19 @@ public class FXMLDocumentController implements Initializable {
         for (Data<Number, Number> data : series.getData()) {
             Node node = data.getNode() ;
             node.setCursor(Cursor.HAND);
-            node.setOnMousePressed(e -> {            	
-            	lastData = data;
-        		pointHeightTextField.setDisable(false);
-        		pointHeightButton.setDisable(false);
+            node.setOnMousePressed(e -> {
+            	if(lastData != data){
+            		if(lastData != null){
+            			lastData.getNode().setStyle("");
+            		}
+            		else {
+                		pointHeightTextField.setDisable(false);
+                		pointHeightButton.setDisable(false);
+            		}
+            		lastData = data;
+            		node.setStyle("-fx-background-color: #00AA00, #000000;");
+                    pointHeightTextField.setText(lastData.getYValue().toString());
+            	}            	
             });
             node.setOnMouseDragged(e -> {
                 Point2D pointInScene = new Point2D(e.getSceneX(), e.getSceneY());
