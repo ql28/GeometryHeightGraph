@@ -19,6 +19,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -188,16 +189,26 @@ public class FXMLDocumentController implements Initializable {
         }
     }    
     
+    @FXML
+    private void quitApplication(ActionEvent event) {
+    	Platform.exit();
+    }
+    
+    @FXML
+    private void about(ActionEvent event) {
+    	
+    }
+    
     /****** PARAMETERS PANEL METHODS ******/
     //load geojson
     @FXML
-    private void graphGoLeft(ActionEvent event){
+    private void graphGoLeft(ActionEvent event) {
     	System.out.println(xAxis.getLowerBound());
     	xAxis.setLowerBound(xAxis.getLowerBound() -1);
     }
     
     @FXML
-    private void saveFeatureCoordinates(){
+    private void saveFeatureCoordinates() {
     	int i = 0;
     	for (Data<Number, Number> data : series.getData()) {
         	ApplicationUtils.saveCoordinates(selectedFeature, i, (double)data.getYValue());
@@ -206,7 +217,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    public void changeNodeValue(ActionEvent e){
+    public void changeNodeValue(ActionEvent e) {
     	if(lastData != null) lastData.setYValue(Double.parseDouble(pointHeightTextField.getText()));
     }    
     
