@@ -273,6 +273,7 @@ public class FXMLDocumentController implements Initializable {
 		    		pointHeightButton.setDisable(true);
 		            ArrayList<Data<Number, Number>> datas = ApplicationUtils.loadCoordinates(selectedFeature);			            	            
 		            datas.forEach(data -> {
+		            	System.out.println(data.toString());
 		            	series.getData().add(data);
 		            });
 		            addActionDragPoint();

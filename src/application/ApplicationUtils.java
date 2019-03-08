@@ -32,16 +32,14 @@ public class ApplicationUtils {
 		return featureJSON.readFeatureCollection(new FileInputStream(featureCollectionFile));
 	}
 	
-	
 	public static ArrayList<Data<Number, Number>> loadCoordinates(SimpleFeature sf){
 		ArrayList<Data<Number, Number>> ret = new ArrayList<Data<Number, Number>>();
 		Coordinate[] c = ((Geometry) sf.getDefaultGeometryProperty().getValue()).getCoordinates();
         double dist = 0;
-        
-    	ret.add(new Data<Number, Number>(dist, c[0].z));
+    	ret.add(new Data<Number, Number>(dist, (Double.isNaN(c[0].z) == true ? 0 : c[0].z)));
         for(int i = 1; i < c.length; i++){
         	dist += getDistanceFromCoordinates(c[i-1], c[i]);
-        	ret.add(new Data<Number, Number>(dist, c[i].z));
+        	ret.add(new Data<Number, Number>(dist, (Double.isNaN(c[i].z) == true ? 0 : c[i].z)));
         }
 		return ret;
 	}
